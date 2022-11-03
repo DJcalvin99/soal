@@ -1,0 +1,158 @@
+JAWABAN A
+
+const huruf = ["A", "B", "J", "M", "N", 9, 12, 30, 82, 99];
+
+huruf.sort();
+console.log(huruf);
+
+
+JAWABAN B
+
+// Java program to find palindromic substrings of a string
+  
+public class GFG {
+    // Returns total number of palindrome substring of
+    // length greater than equal to 2
+    static int CountPS(char str[], int n)
+    {
+        // create empty 2-D matrix that counts all
+        // palindrome substring. dp[i][j] stores counts of
+        // palindromic substrings in st[i..j]
+        int dp[][] = new int[n][n];
+  
+        // P[i][j] = true if substring str[i..j] is
+        // palindrome, else false
+        boolean P[][] = new boolean[n][n];
+  
+        // palindrome of single length
+        for (int i = 0; i < n; i++)
+            P[i][i] = true;
+  
+        // palindrome of length 2
+        for (int i = 0; i < n - 1; i++) {
+            if (str[i] == str[i + 1]) {
+                P[i][i + 1] = true;
+                dp[i][i + 1] = 1;
+            }
+        }
+  
+        // Palindromes of length more than 2. This loop is
+        // similar to Matrix Chain Multiplication. We start
+        // with a gap of length 2 and fill the DP table in a
+        // way that gap between starting and ending indexes
+        // increases one by one by outer loop.
+        for (int gap = 2; gap < n; gap++) {
+            // Pick starting point for current gap
+            for (int i = 0; i < n - gap; i++) {
+                // Set ending point
+                int j = gap + i;
+  
+                // If current string is palindrome
+                if (str[i] == str[j] && P[i + 1][j - 1])
+                    P[i][j] = true;
+  
+                // Add current palindrome substring ( + 1)
+                // and rest palindrome substring (dp[i][j-1]
+                // + dp[i+1][j]) remove common palindrome
+                // substrings (- dp[i+1][j-1])
+                if (P[i][j] == true)
+                    dp[i][j] = dp[i][j - 1] + dp[i + 1][j]
+                               + 1 - dp[i + 1][j - 1];
+                else
+                    dp[i][j] = dp[i][j - 1] + dp[i + 1][j]
+                               - dp[i + 1][j - 1];
+            }
+        }
+  
+        // return total palindromic substrings
+        return dp[0][n - 1];
+    }
+  
+    // Driver code
+    public static void main(String[] args)
+    {
+        String str = "abaab";
+        System.out.println(
+            CountPS(str.toCharArray(), str.length()));
+    }
+    
+ JAWABAN C
+ 
+ #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+
+// Determines if the substring contains the character
+static int ifSubstringContainchar(char character, char *subString, int subStringLength, int *charCtr);
+
+int main()
+{
+    char inputString[80];
+    char subString[80];
+    int inputLen;
+    int index;
+    int subStringLenght;
+    int characterCtr[80];
+
+    // Request input string from a user
+    printf("Input a string : ");
+    fgets(inputString, sizeof inputString, stdin);
+
+    // Count total number of character from input string
+    inputLen = strlen(inputString);
+
+    characterCtr[0] = 1;
+    subStringLenght = 0;
+
+    // Loop through each character in the input string
+    for (index = 1; index < inputLen; index++)
+    {
+        if (!isgraph(inputString[index])) continue;
+
+        if (ifSubstringContainchar(inputString[index], subString, subStringLenght, characterCtr))
+        {
+            //Increase substring lenght
+            subStringLenght++;
+
+            // Copy the next character to the substring
+            subString[subStringLenght] = inputString[index];
+
+            // Set the counter of that character to 1
+            characterCtr[subStringLenght] = 1;
+        }
+    }
+
+    printf("Character count of each character :\n");
+
+    // Print the total number of characters in the string
+    for (index = 0; index <= subStringLenght; index++)
+    {
+        printf("%c\t%d\n", subString[index], characterCtr[index]);
+    }
+
+    return 0;
+}
+
+static int ifSubstringContainerChar(char character, char *subString, int subStringLenght, int *charCtr)
+{
+    int index;
+
+    // Loop through each character in the substring
+    for (index = 0; index <= subStringLenght; index++)
+    {
+        // If a character is found in the substring,
+        // increase its counter and return.
+        if (subString[index] == character)
+        {
+            charCtr[index]++;
+            return 1;
+        }
+    }
+
+    // The loop reached to the end of the substring
+    // and did not find the character
+    if (index > subStringLenght) return 0;
+}
+
+ 
